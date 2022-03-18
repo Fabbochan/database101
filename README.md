@@ -1,7 +1,8 @@
 # database101
 
 # Basic Description:
-This repo is used for me to get to know the SQL database structure and add, change and delete information with the database with python. As an example, this code is used to administrate a library.
+This repo is used by me to get to know the SQL database structure and add, change and delete information within the database by using python. 
+As an example, this code is used to administrate a online library.
 
 # The Project
 The project has one main file, which inherits the functions to:
