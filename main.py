@@ -140,6 +140,31 @@ def review_book(book_id, username, content, rating, published_date):
     print("STATUS: Review created.")
 
 
+def check_user(username):
+    db = sqlite3.connect("db.sqlite3")
+    cursor = db.cursor()
+    cursor.execute("""SELECT id, username, enabled FROM users WHERE username=?""", (username,))
+    user = list(cursor.fetchone())
+    db.close()
+    return user
+
+
+def login_user(username):
+    db = sqlite3.connect("db.sqlite3")
+    cursor = db.cursor()
+    cursor.execute("""SELECT id, username, enabled FROM users WHERE username=?""", (username,))
+    user = list(cursor.fetchone())
+
+    # to get the current time for the checkout
+    now = datetime.now()
+    current_time = now.strftime("%d_%m_%Y-%H:%M:%S")
+
+    cursor.execute("""INSERT INTO login(user_id, login_time) VALUES(?,?)""", (user[0], current_time))
+    db.commit()
+    db.close()
+    return user
+
+
 if __name__ == "__main__":
 
     # fake data
