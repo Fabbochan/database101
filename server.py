@@ -50,5 +50,16 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/user_management", methods=['GET', 'POST'])
+@login_required
+def create_user():
+    if request.method == "POST":
+        try:
+            main.create_user(username=request.form["username"])
+        except TypeError as input_error:
+            print(input_error)
+    return render_template("user_management.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)

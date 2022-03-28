@@ -4,12 +4,47 @@ from datetime import datetime
 import random
 
 
-def create_user(username, enabled, street, city, state):
+# def create_user(username, enabled, street, city, state):
+#     """
+#     This function creates a new user in the SQLITE3 DB with the passed credentials
+#     """
+#
+#     # database gets opened and a cursor is created
+#     db = sqlite3.connect("db.sqlite3")
+#     cursor = db.cursor()
+#
+#     # with the recieved data a new user gets created in the users table
+#     cursor.execute("""INSERT INTO users(username, enabled)
+#                     VALUES(?,?)""", (username, enabled))
+#
+#     db.commit()
+#
+#     # we access the new user_id
+#     cursor.execute("""SELECT id FROM users WHERE username=?""", (username,))
+#     user = cursor.fetchone()
+#     # and store the user_id in the user_id variable
+#     user_id = list(user)[0]
+#
+#     # we populate the addresses table with the new user information and connect it to the user_id
+#     cursor.execute("""INSERT INTO addresses(user_id, street, city, state) VALUES(?,?,?,?)""",
+#                    (user_id, street, city, state))
+#     db.commit()
+#
+#     # database gets closed
+#     db.close()
+#
+#     # status print
+#     print("STATUS: User created.")/
+
+
+def create_user(username):
     """
     This function creates a new user in the SQLITE3 DB with the passed credentials
     """
 
     # database gets opened and a cursor is created
+    enabled = True
+
     db = sqlite3.connect("db.sqlite3")
     cursor = db.cursor()
 
@@ -19,18 +54,6 @@ def create_user(username, enabled, street, city, state):
 
     db.commit()
 
-    # we access the new user_id
-    cursor.execute("""SELECT id FROM users WHERE username=?""", (username,))
-    user = cursor.fetchone()
-    # and store the user_id in the user_id variable
-    user_id = list(user)[0]
-
-    # we populate the addresses table with the new user information and connect it to the user_id
-    cursor.execute("""INSERT INTO addresses(user_id, street, city, state) VALUES(?,?,?,?)""",
-                   (user_id, street, city, state))
-    db.commit()
-
-    # database gets closed
     db.close()
 
     # status print
