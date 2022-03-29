@@ -1,11 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, PasswordField
+from wtforms.validators import DataRequired
 import main
 from functools import wraps
 
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "abcdefg"
 authorized = False
 user = None
+
+
+# we need to create a form class
+class NamerForm(FlaskForm):
+    name = StringField("Username", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+    password = PasswordField("Password", validators=[DataRequired()])
 
 
 def login_required(f):
@@ -51,16 +62,29 @@ def logout():
 
 
 @app.route("/user_management", methods=['GET', 'POST'])
-@login_required
+# @login_required
 def user_management():
-    all_user = main.fetch_all_user()
-    if request.method == "POST":
-        try:
-            main.create_user(username=request.form["username"])
-            return render_template("user_management.html", all_user=all_user)
-        except TypeError as input_error:
-            print(input_error)
-    return render_template("user_management.html", all_user=all_user)
+    form = NamerForm()
+    message = None
+    user = None
+    if form.is_submitted():
+        main.create_user(form.name.data)
+        user = form.name.data.capitalize()
+        form.name.data = ""
+        message = " added to database!"
+    return render_template("user_management.html",
+                           form=form,
+                           message=message, user=user)
+
+
+@app.route("/name", methods=["GET", "POST"])
+def name():
+    name = None
+    form = NamerForm()
+    if form.is_submitted():
+        name = form.name.data
+        form.name.data = ""
+    return render_template("name.html", name=name, form=form)
 
 
 if __name__ == "__main__":

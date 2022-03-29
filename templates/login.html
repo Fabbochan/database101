@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<link rel="stylesheet" href="/static/lib/style.css" type="text/css">
-<link rel="stylesheet" href="/static/lib/skeleton.css" type="text/css">
-<link rel="stylesheet" href="/static/lib/normalize.css" type="text/css">
 <title>Login</title>
-<br>
+<div>
+  <br>
   <h1>Please login</h1>
   <form action="" method="post">
-    <input type="text" placeholder="Username" name="username" value="{{
+    <lable class="form-label">Username</lable>
+    <input type="text" class="form-control" placeholder="Username" name="username" value="{{
       request.form.username }}">
-     <input type="password" placeholder="Password" name="password" value="{{
+    <lable class="form-label">Password</lable>
+     <input type="password" class="form-control" placeholder="Password" name="password" value="{{
       request.form.password }}">
-    <input class="btn btn-default" type="submit" value="Login">
+    <br>
+    <input class="btn btn-secondary" type="submit" value="Login">
   </form>
   {% if error %}
     <p class="error"><strong>Error:</strong> {{ error }}
   {% endif %}
+</div>
+
 {% endblock %}
