@@ -2,27 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+<link rel="stylesheet" href="/static/lib/style.css" type="text/css">
+<link rel="stylesheet" href="/static/lib/skeleton.css" type="text/css">
+<link rel="stylesheet" href="/static/lib/normalize.css" type="text/css">
 </head>
 <body>
-        <div>
-        <ul>
-        <li>
-            <form action="http://127.0.0.1:5000/">
-                <button type="submit">Home</button>
-            </form>
-        </li>
-
-        <li>
-            <form action="http://127.0.0.1:5000/user_management">
-                <button type="submit">Create User</button>
-            </form>
-        </li>
-        <li>
-            <form action="http://127.0.0.1:5000/logout">
-                <button type="submit">Logout</button>
-            </form>
-        </li>
-        </ul>
+    <div class="topnav">
+      <a class="active" href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('user_management') }}">User Management</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
     </div>
     <div>
         {% block content %}

@@ -52,13 +52,15 @@ def logout():
 
 @app.route("/user_management", methods=['GET', 'POST'])
 @login_required
-def create_user():
+def user_management():
+    all_user = main.fetch_all_user()
     if request.method == "POST":
         try:
             main.create_user(username=request.form["username"])
+            return render_template("user_management.html", all_user=all_user)
         except TypeError as input_error:
             print(input_error)
-    return render_template("user_management.html")
+    return render_template("user_management.html", all_user=all_user)
 
 
 if __name__ == "__main__":

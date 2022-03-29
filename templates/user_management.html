@@ -1,15 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
+<link rel="stylesheet" href="/static/lib/style.css" type="text/css">
+<link rel="stylesheet" href="/static/lib/skeleton.css" type="text/css">
+<link rel="stylesheet" href="/static/lib/normalize.css" type="text/css">
+
+<title>User Management</title>
+
 <div class="container">
-<h1>User Management</h1>
-  <br>
-  <form action="" method="post">
-    <input type="text" placeholder="Username" name="username" value="{{
-      request.form.username }}">
-    <input class="btn btn-default" type="submit" value="create">
+  <h1>User Management</h1>
+
+  <form action="" id="my_form" method="post" autocomplete="off">
+  <input type="text" placeholder="Username" name="username" value="{{
+    request.form.username }}">
+  <input class="btn btn-default" type="submit" value="create">
   </form>
+  <script src="/static/src/index.js"></script>
   {% if error %}
   <p class="error"><strong>Error:</strong> {{ error }}
   {% endif %}
 </div>
+
+<div class="container">
+  <button style="" onClick="window.location.reload();">Refresh Page</button>
+<table>
+  <thead>
+    <tr>
+      <th>ID
+      <th>User Name
+      <th>Enabled
+  </thead>
+  <tbody>
+  {% for user in all_user %}
+    <tr>
+      <td>{{user[0]}}
+      <td>{{user[1]}}
+      <td>{{user[2]}}
+    <tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+
+
 {% endblock %}

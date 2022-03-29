@@ -188,18 +188,32 @@ def login_user(username):
     return user
 
 
+def fetch_all_user():
+    db = sqlite3.connect("db.sqlite3")
+    cursor = db.cursor()
+    cursor.execute("""SELECT id, username, enabled FROM users """)
+    fetched_user = list(cursor.fetchall())
+    # users = []
+    # for i in fetched_user:
+    #     users.append(i[0])
+    db.close()
+    return fetched_user
+
+
+
 if __name__ == "__main__":
 
     # fake data
     faker = Faker()
+    print(fetch_all_user())
     # name = faker.name()
     # enabled = "t"
     # city = faker.city()
     # street = faker.street_address()
     # state = faker.country_code()
-    content = faker.text()
-    rating = random.randint(1,5)
-    published_date = faker.date_time_this_century()
+    # content = faker.text()
+    # rating = random.randint(1,5)
+    # published_date = faker.date_time_this_century()
 
     # create_user(username=name, enabled=enabled, street=street, city=city, state=state)
 
@@ -208,8 +222,8 @@ if __name__ == "__main__":
     # book_id = random.randint(0, len(num_books)-1)
     # book_checkout(book_id=book_id, username="Christopher Lopez", return_date="30.04.2022")
 
-    book_ids = pick_book()
-    book_id = random.randint(0, len(book_ids)-1)
-    username = pick_user()
-    review_book(book_id, username=username, content=content, rating=rating, published_date=published_date)
+    # book_ids = pick_book()
+    # book_id = random.randint(0, len(book_ids)-1)
+    # username = pick_user()
+    # review_book(book_id, username=username, content=content, rating=rating, published_date=published_date)
 
