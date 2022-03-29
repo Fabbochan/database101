@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<title>User Management</title>
+<div class="container">
+  <br>
+  <h1>Create a Review!</h1>
+    <form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.id.label(class="form-label") }}
+      {{ form.id(class="form-control") }}
+    {{ form.book_id.label(class="form-label") }}
+      {{ form.book_id(class="form-control") }}
+    {{ form.reviewer_name.label(class="form-label") }}
+      {{ form.reviewer_name(class="form-control") }}
+    {{ form.content.label(class="form-label") }}
+      {{ form.content(class="form-control") }}
+    {{ form.rating.label(class="form-label") }}
+      {{ form.rating(class="form-control") }}
+    {{ form.published_date.label(class="form-label") }}
+      {{ form.published_date(class="form-control") }}
+    <br>
+    {{ form.submit(class="btn btn-secondary")}}
+  </form>
+</div>
+{% endblock %}

@@ -1,8 +1,75 @@
 {% extends "base.html" %}
 {% block content %}
-<link rel="stylesheet" href="/static/lib/style.css" type="text/css">
 <title>Homepage</title>
 <br>
-<h1>This is the homepage</h1>
+<h1>Books</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">Published Date</th>
+      <th scope="col">ISBN</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for book in book_info %}
+    <tr>
+      <th scope="row">{{book[0]}}</th>
+      <td>{{book[1]}}</td>
+      <td>{{book[2]}}</td>
+      <td>{{book[3]}}</td>
+      <td>{{book[4]}}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<br>
+<h1>User</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Username</th>
+      <th scope="col">Enabled</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in user_info %}
+    <tr>
+      <th scope="row">{{user[0]}}</th>
+      <td>{{user[1]}}</td>
+      <td>{{user[2]}}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<br>
+<h1>Reviews</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#User</th>
+      <th scope="col">#Book</th>
+      <th scope="col">Reviewer-Name</th>
+      <th scope="col">Content</th>
+      <th scope="col">Rating</th>
+      <th scope="col">Published Date</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for review in review_info %}
+    <tr>
+      <th scope="row">{{review[0]}}</th>
+      <td>{{review[1]}}</td>
+      <td>{{review[2]}}</td>
+      <td>{{review[3]}}</td>
+      <td>{{review[4]}}</td>
+      <td>{{review[5]}}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
 

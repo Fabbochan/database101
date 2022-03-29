@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 <title>User Management</title>
-
 <div class="container">
   <br>
   <h1>Create a user!</h1>
@@ -16,24 +15,6 @@
     {% if message %}
       <p>{{user}}{{message}}</p>
     {% endif %}
-<!--  <h1>Existing User</h1>-->
-<!--    <table>-->
-<!--      <thead>-->
-<!--        <tr>-->
-<!--          <th>ID-->
-<!--          <th>User Name-->
-<!--          <th>Enabled-->
-<!--      </thead>-->
-<!--      <tbody>-->
-<!--      {% for user in all_user %}-->
-<!--        <tr>-->
-<!--          <td>{{user[0]}}-->
-<!--          <td>{{user[1]}}-->
-<!--          <td>{{user[2]}}-->
-<!--        <tr>-->
-<!--      {% endfor %}-->
-<!--      </tbody>-->
-<!--    </table>-->
 
 </div>
 {% endblock %}

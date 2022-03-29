@@ -60,6 +60,17 @@ def create_user(username):
     print("STATUS: User created.")
 
 
+def create_book_review(reviewer_name, content, rating, published_date):
+    book_id = 1
+    db = sqlite3.connect("db.sqlite3")
+    cursor = db.cursor()
+    cursor.execute("""INSERT INTO reviews(book_id, reviewer_name, content, rating, published_date)
+                        VALUES(?,?,?,?,?)""", (book_id, reviewer_name, content, rating, published_date))
+    db.commit()
+    db.close()
+    print("Review created!")
+
+
 def book_checkout(book_id, username, return_date):
     """
     This function recievs a required book_id, a username and a return date
@@ -102,7 +113,7 @@ def book_checkout(book_id, username, return_date):
     db.close()
 
 
-def pick_book():
+def pick_book_id():
     """
     This function picks a random book from the books table
     """
@@ -122,6 +133,28 @@ def pick_book():
 
     # we return the book_ids list
     return book_ids
+
+
+def pick_book():
+    """
+    This function picks a random book from the books table
+    """
+    db = sqlite3.connect("db.sqlite3")
+    cursor = db.cursor()
+
+    cursor.execute("""SELECT * FROM books""")
+    # we get a tuple back and store it in fetched_book_ids
+    fetched_books = cursor.fetchall()
+
+    # we create a list called book_ids and append the tuple objects to the list
+    book_info = []
+    for info in fetched_books:
+        book_info.append(list(info))
+
+    db.close()
+
+    # we return the book_ids list
+    return book_info
 
 
 def pick_user():
@@ -191,21 +224,25 @@ def login_user(username):
 def fetch_all_user():
     db = sqlite3.connect("db.sqlite3")
     cursor = db.cursor()
-    cursor.execute("""SELECT id, username, enabled FROM users """)
+    cursor.execute("""SELECT * FROM users """)
     fetched_user = list(cursor.fetchall())
-    # users = []
-    # for i in fetched_user:
-    #     users.append(i[0])
     db.close()
     return fetched_user
 
+
+def fetch_all_reviews():
+    db = sqlite3.connect("db.sqlite3")
+    cursor = db.cursor()
+    cursor.execute("""SELECT * FROM reviews """)
+    fetched_reviews = list(cursor.fetchall())
+    db.close()
+    return fetched_reviews
 
 
 if __name__ == "__main__":
 
     # fake data
     faker = Faker()
-    print(fetch_all_user())
     # name = faker.name()
     # enabled = "t"
     # city = faker.city()

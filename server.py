@@ -19,6 +19,16 @@ class NamerForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
 
 
+class BookReviewForm(FlaskForm):
+    id = StringField("id")
+    book_id = StringField("book_id")
+    reviewer_name = StringField("reviewer_name")
+    content = StringField("content")
+    rating = StringField("rating")
+    published_date = StringField("published_date")
+    submit = SubmitField("Create")
+
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -29,9 +39,16 @@ def login_required(f):
 
 
 @app.route("/")
-@login_required
+# @login_required
 def home():
-    return render_template("home.html", user=user)
+    book_info = main.pick_book()
+    user_info = main.fetch_all_user()
+    review_info = main.fetch_all_reviews()
+    return render_template("home.html",
+                           user=user,
+                           book_info=book_info,
+                           user_info=user_info,
+                           review_info=review_info)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -61,6 +78,28 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/content_management", methods=['GET', 'POST'])
+# @login_required
+def content_management():
+    form = BookReviewForm()
+    if form.is_submitted():
+        review_info = [form.id.data,
+                       form.book_id.data,
+                       form.reviewer_name.data,
+                       form.content.data,
+                       form.rating.data,
+                       form.published_date.data
+                       ]
+        form.id.data, \
+        form.book_id.data, \
+        form.reviewer_name.data, \
+        form.content.data, \
+        form.rating.data, \
+        form.published_date.data = "", "", "", "", "", ""
+        main.create_book_review(review_info[2],review_info[3],review_info[4], review_info[5])
+    return render_template("content_management.html", form=form)
+
+
 @app.route("/user_management", methods=['GET', 'POST'])
 # @login_required
 def user_management():
@@ -78,6 +117,7 @@ def user_management():
 
 
 @app.route("/name", methods=["GET", "POST"])
+# @login_required
 def name():
     name = None
     form = NamerForm()
