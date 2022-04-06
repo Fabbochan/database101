@@ -16,8 +16,8 @@ def create_user(username, password):
     cursor = db.cursor()
 
     # with the recieved data a new user gets created in the users table
-    cursor.execute("""INSERT INTO users(username, enabled)
-                    VALUES(?,?)""", (username, enabled))
+    cursor.execute("""INSERT INTO users(username, enabled, password)
+                    VALUES(?,?,?)""", (username, enabled, password,))
 
     db.commit()
 

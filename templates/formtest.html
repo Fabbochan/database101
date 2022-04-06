@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<title>Form TEST</title>
+<h1>Create a book</h1>
+{% from "_formhelpers.html" import render_field %}
+<form action="{{ url_for('bookcreation') }}" method=post>
+  <dl>
+    {{ render_field(bookform.title, class="form-control") }}
+  </dl>
+  <p><input type=submit value=Submit class="btn btn-secondary">
+</form>
+<h1>Create a user</h1>
+{% from "_formhelpers.html" import render_field %}
+<form action="{{ url_for('usercreation') }}" method=post>
+  <dl>
+    {{ render_field(userform.username, class="form-control") }}
+  </dl>
+  <p><input type=submit value=Create class="btn btn-secondary">
+</form>
+{% endblock %}
+

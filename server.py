@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, DateField, validators
 from wtforms.validators import DataRequired
 import main
 from functools import wraps
@@ -14,9 +14,10 @@ user = None
 
 # we need to create a form class
 class NamerForm(FlaskForm):
-    name = StringField("Username", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired()])
     submit = SubmitField("Submit")
-    password = PasswordField("Password", validators=[DataRequired()])
+    password = PasswordField("Password", [
+        validators.DataRequired()])
 
 
 class BookReviewForm(FlaskForm):
@@ -25,8 +26,16 @@ class BookReviewForm(FlaskForm):
     reviewer_name = StringField("reviewer_name")
     content = StringField("content")
     rating = StringField("rating")
-    published_date = StringField("published_date")
+    published_date = DateField("published_date")
     submit = SubmitField("Create")
+
+
+class BookEntryForm(FlaskForm):
+    title = StringField("title")
+    author = StringField("author")
+    publish_date = DateField("publish_date")
+    isbn = StringField("isbn")
+    submit = SubmitField("create")
 
 
 def login_required(f):
@@ -59,7 +68,7 @@ def login():
     if request.method == 'POST':
         try:
             if request.form['username'] == main.check_user(request.form["username"])[1] and \
-                    request.form['password'] == 'admin':
+                    request.form['password'] == main.check_user(request.form["username"])[3]:
                 user = main.login_user(request.form["username"])
                 authorized = True
                 print("login successfull")
@@ -78,42 +87,80 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/content_management", methods=['GET', 'POST'])
+@app.route("/content_management", )
 # @login_required
 def content_management():
-    form = BookReviewForm()
-    if form.is_submitted():
-        review_info = [form.id.data,
-                       form.book_id.data,
-                       form.reviewer_name.data,
-                       form.content.data,
-                       form.rating.data,
-                       form.published_date.data
-                       ]
-        form.id.data, \
-        form.book_id.data, \
-        form.reviewer_name.data, \
-        form.content.data, \
-        form.rating.data, \
-        form.published_date.data = "", "", "", "", "", ""
-        main.create_book_review(review_info[2],review_info[3],review_info[4], review_info[5])
-    return render_template("content_management.html", form=form)
+    review_form = BookReviewForm()
+    book_creation_form = BookEntryForm()
+
+    return render_template("content_management.html", review_form=review_form, book_creation_form=book_creation_form)
+
+
+@app.route("/bookcreation", methods=["POST"])
+def bookcreation():
+    review_form = BookReviewForm()
+    book_creation_form = BookEntryForm()
+
+    if book_creation_form.is_submitted():
+        if book_creation_form.is_submitted():
+            book_creation_info = [book_creation_form.title.data,
+                                  book_creation_form.author.data,
+                                  book_creation_form.publish_date.data,
+                                  book_creation_form.isbn.data]
+            book_creation_form.title.data, \
+            book_creation_form.author.data, \
+            book_creation_form.publish_date.data, \
+            book_creation_form.isbn.data = "", "", "", ""
+            print(book_creation_info)
+    return render_template("content_management.html", review_form=review_form, book_creation_form=book_creation_form)
+
+
+@app.route("/review_creation", methods=["POST"])
+def review_creation():
+    review_form = BookReviewForm()
+    book_creation_form = BookEntryForm()
+
+    if review_form.is_submitted():
+        if review_form.is_submitted():
+            review_info = [review_form.id.data,
+                           review_form.book_id.data,
+                           review_form.reviewer_name.data,
+                           review_form.content.data,
+                           review_form.rating.data,
+                           review_form.published_date.data
+                           ]
+            review_form.id.data, \
+            review_form.book_id.data, \
+            review_form.reviewer_name.data, \
+            review_form.content.data, \
+            review_form.rating.data, \
+            review_form.published_date.data = "", "", "", "", "", ""
+            main.create_book_review(review_info[2], review_info[3], review_info[4], review_info[5])
+
+    return render_template("content_management.html", review_form=review_form, book_creation_form=book_creation_form)
 
 
 @app.route("/user_management", methods=['GET', 'POST'])
 # @login_required
 def user_management():
-    form = NamerForm()
-    message = None
     user = None
-    if form.is_submitted():
-        main.create_user(form.name.data)
-        user = form.name.data.capitalize()
-        form.name.data = ""
-        message = " added to database!"
+    form = NamerForm(request.form)
+    if request.method == "POST" and form.submit():
+        new_user = [form.username.data, form.password.data]
+        main.create_user(new_user[0], new_user[1])
+        user = new_user[0].capitalize()
+        form.username.data = ""
+        form.password.data = ""
+        flash(f"{user} added to database!")
     return render_template("user_management.html",
-                           form=form,
-                           message=message, user=user)
+                           form=form, user=user)
+
+
+@app.route("/forms")
+def index():
+    userform = NamerForm()
+    bookform = BookEntryForm()
+    return render_template("formtest.html", userform=userform, bookform=bookform)
 
 
 @app.route("/name", methods=["GET", "POST"])
@@ -122,8 +169,8 @@ def name():
     name = None
     form = NamerForm()
     if form.is_submitted():
-        name = form.name.data
-        form.name.data = ""
+        name = form.username.data
+        form.username.data = ""
     return render_template("name.html", name=name, form=form)
 
 

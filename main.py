@@ -37,7 +37,7 @@ import random
 #     print("STATUS: User created.")/
 
 
-def create_user(username):
+def create_user(username, password):
     """
     This function creates a new user in the SQLITE3 DB with the passed credentials
     """
@@ -49,8 +49,8 @@ def create_user(username):
     cursor = db.cursor()
 
     # with the recieved data a new user gets created in the users table
-    cursor.execute("""INSERT INTO users(username, enabled)
-                    VALUES(?,?)""", (username, enabled))
+    cursor.execute("""INSERT INTO users(username, enabled, password)
+                    VALUES(?,?,?)""", (username, enabled, password,))
 
     db.commit()
 
@@ -68,7 +68,7 @@ def create_book_review(reviewer_name, content, rating, published_date):
                         VALUES(?,?,?,?,?)""", (book_id, reviewer_name, content, rating, published_date))
     db.commit()
     db.close()
-    print("Review created!")
+    print("Book Review created!")
 
 
 def book_checkout(book_id, username, return_date):
@@ -199,7 +199,7 @@ def review_book(book_id, username, content, rating, published_date):
 def check_user(username):
     db = sqlite3.connect("db.sqlite3")
     cursor = db.cursor()
-    cursor.execute("""SELECT id, username, enabled FROM users WHERE username=?""", (username,))
+    cursor.execute("""SELECT id, username, enabled, password FROM users WHERE username=?""", (username,))
     user = list(cursor.fetchone())
     db.close()
     return user

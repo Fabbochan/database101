@@ -1,20 +1,24 @@
 {% extends "base.html" %}
+
 {% block content %}
 <title>User Management</title>
 <div class="container">
-  <br>
-  <h1>Create a user!</h1>
-    <form method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.name.label(class="form-label") }}
-    {{ form.name(class="form-control") }}
-    <br>
-    {{ form.submit(class="btn btn-secondary")}}
-  </form>
-  <br>
-    {% if message %}
-      <p>{{user}}{{message}}</p>
-    {% endif %}
-
+<br>
+<h1>Create a user</h1>
+{% from "_formhelpers.html" import render_field %}
+<form method=post>
+  <dl>
+    {{ render_field(form.username, class="form-control") }}
+    {{ render_field(form.password, class="form-control") }}
+  </dl>
+  <p><input type=submit value=Create class="btn btn-secondary">
+</form>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 </div>
 {% endblock %}
