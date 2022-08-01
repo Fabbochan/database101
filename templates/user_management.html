@@ -21,4 +21,35 @@
   {% endif %}
 {% endwith %}
 </div>
+
+<h1>User Information</h1>
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        Login Information
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">login time</th>
+
+      </tr>
+    </thead>
+    <tbody>
+    {% for entry in user_info %}
+      <tr>
+        <td>{{entry[1]}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

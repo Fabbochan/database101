@@ -205,6 +205,15 @@ def check_user(username):
     return user
 
 
+def check_user_info(user):
+    db = sqlite3.connect("db.sqlite3")
+    cursor = db.cursor()
+    user_id = user[0]
+    cursor.execute("""SELECT id, login_time FROM login WHERE user_id=? ORDER BY id DESC""", (user_id,))
+    user_info = list(cursor.fetchall())
+    return user_info
+
+
 def login_user(username):
     db = sqlite3.connect("db.sqlite3")
     cursor = db.cursor()

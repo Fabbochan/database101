@@ -48,7 +48,7 @@ def login_required(f):
 
 
 @app.route("/")
-# @login_required
+@login_required
 def home():
     book_info = main.pick_book()
     user_info = main.fetch_all_user()
@@ -71,7 +71,7 @@ def login():
                     request.form['password'] == main.check_user(request.form["username"])[3]:
                 user = main.login_user(request.form["username"])
                 authorized = True
-                print("login successfull")
+                print(f"login successfull as {user[1]}, id: {user[0]}")
                 return redirect(url_for("home", user=user))
         except TypeError:
             error = 'Invalid Credentials! Please try again.'
@@ -88,7 +88,7 @@ def logout():
 
 
 @app.route("/content_management", )
-# @login_required
+@login_required
 def content_management():
     review_form = BookReviewForm()
     book_creation_form = BookEntryForm()
@@ -97,6 +97,7 @@ def content_management():
 
 
 @app.route("/bookcreation", methods=["POST"])
+@login_required
 def bookcreation():
     review_form = BookReviewForm()
     book_creation_form = BookEntryForm()
@@ -116,6 +117,7 @@ def bookcreation():
 
 
 @app.route("/review_creation", methods=["POST"])
+@login_required
 def review_creation():
     review_form = BookReviewForm()
     book_creation_form = BookEntryForm()
@@ -141,9 +143,9 @@ def review_creation():
 
 
 @app.route("/user_management", methods=['GET', 'POST'])
-# @login_required
+@login_required
 def user_management():
-    user = None
+    global user
     form = NamerForm(request.form)
     if request.method == "POST" and form.submit():
         new_user = [form.username.data, form.password.data]
@@ -152,11 +154,13 @@ def user_management():
         form.username.data = ""
         form.password.data = ""
         flash(f"{user} added to database!")
+    user_info = main.check_user_info(user)
     return render_template("user_management.html",
-                           form=form, user=user)
+                           form=form, user=user, user_info=user_info)
 
 
 @app.route("/forms")
+@login_required
 def index():
     userform = NamerForm()
     bookform = BookEntryForm()
@@ -164,7 +168,7 @@ def index():
 
 
 @app.route("/name", methods=["GET", "POST"])
-# @login_required
+@login_required
 def name():
     name = None
     form = NamerForm()
