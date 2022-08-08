@@ -90,15 +90,27 @@ def logout():
 @app.route("/content_management", )
 @login_required
 def content_management():
+    global user
     review_form = BookReviewForm()
     book_creation_form = BookEntryForm()
 
     return render_template("content_management.html", review_form=review_form, book_creation_form=book_creation_form)
 
 
+@app.route("/book_creation")
+@login_required
+def book_creation():
+    global user
+    review_form = BookReviewForm()
+    book_creation_form = BookEntryForm()
+    print("access", user[1])
+    return render_template("book_creation.html", review_form=review_form, book_creation_form=book_creation_form)
+
+
 @app.route("/bookcreation", methods=["POST"])
 @login_required
 def bookcreation():
+    global user
     review_form = BookReviewForm()
     book_creation_form = BookEntryForm()
 
@@ -113,12 +125,13 @@ def bookcreation():
             book_creation_form.publish_date.data, \
             book_creation_form.isbn.data = "", "", "", ""
             print(book_creation_info)
-    return render_template("content_management.html", review_form=review_form, book_creation_form=book_creation_form)
+    return render_template("book_creation.html", review_form=review_form, book_creation_form=book_creation_form)
 
 
 @app.route("/review_creation", methods=["POST"])
 @login_required
 def review_creation():
+    global user
     review_form = BookReviewForm()
     book_creation_form = BookEntryForm()
 
@@ -139,7 +152,7 @@ def review_creation():
             review_form.published_date.data = "", "", "", "", "", ""
             main.create_book_review(review_info[2], review_info[3], review_info[4], review_info[5])
 
-    return render_template("content_management.html", review_form=review_form, book_creation_form=book_creation_form)
+    return render_template("book_creation.html", review_form=review_form, book_creation_form=book_creation_form)
 
 
 @app.route("/user_management", methods=['GET', 'POST'])
@@ -147,6 +160,7 @@ def review_creation():
 def user_management():
     global user
     form = NamerForm(request.form)
+    user_info = main.check_user_info(user)
     if request.method == "POST" and form.submit():
         new_user = [form.username.data, form.password.data]
         main.create_user(new_user[0], new_user[1])
@@ -154,9 +168,17 @@ def user_management():
         form.username.data = ""
         form.password.data = ""
         flash(f"{user} added to database!")
-    user_info = main.check_user_info(user)
+    print("access", user[1])
     return render_template("user_management.html",
                            form=form, user=user, user_info=user_info)
+
+@login_required
+@app.route("/login_information", methods=["GET"])
+def login_information():
+    global user
+    user_info = main.check_user_info(user)
+    print("access", user[1])
+    return render_template("login_information.html", user=user, user_info=user_info)
 
 
 @app.route("/forms")
