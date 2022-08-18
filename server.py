@@ -4,6 +4,7 @@ from wtforms import StringField, SubmitField, PasswordField, DateField, validato
 from wtforms.validators import DataRequired
 import main
 from functools import wraps
+import webscraper
 
 
 app = Flask(__name__)
@@ -36,6 +37,16 @@ class BookEntryForm(FlaskForm):
     publish_date = DateField("publish_date")
     isbn = StringField("isbn")
     submit = SubmitField("create")
+
+
+class TwitterUserSearchForm(FlaskForm):
+    username = StringField("username")
+
+
+class TwitterStringSearchForm(FlaskForm):
+    search_string = StringField("Search_text")
+    startdate = DateField("startdate")
+    enddate = DateField("enddate")
 
 
 def login_required(f):
@@ -91,10 +102,28 @@ def logout():
 @login_required
 def content_management():
     global user
-    review_form = BookReviewForm()
-    book_creation_form = BookEntryForm()
 
-    return render_template("content_management.html", review_form=review_form, book_creation_form=book_creation_form)
+    return render_template("content_management.html")
+
+
+@app.route("/webparser", methods=["GET", "POST"])
+@login_required
+def webparser_content():
+    global user
+    print(user)
+    twitter_user = None
+    tweet_form = TwitterUserSearchForm()
+    if request.method == "POST" and tweet_form.is_submitted():
+        twitter_user = tweet_form.username.data
+        tweet_form.username.data = ""
+        print(twitter_user)
+
+    tweet_info = webscraper.get_tweets_from_user(twitter_user)
+
+    return render_template("webparser.html",
+                           twitter_user=twitter_user,
+                           tweet_form=tweet_form,
+                           tweet_info=tweet_info)
 
 
 @app.route("/book_creation")

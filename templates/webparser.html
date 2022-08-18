@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_field %}
+<form action="{{ url_for('webparser_content') }}" method=post>
+  <dl>
+    {{ render_field(tweet_form.username, class="form-control") }}
+  </dl>
+  <p><input type=submit value=Send class="btn btn-secondary">
+</form>
+
+{% if twitter_user != None %}
+  <h1>Tweets from {{ twitter_user }}</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Tweet Date</th>
+        <th scope="col">Tweet Content</th>
+        <th scope="col">Tweet Source</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for tweet in tweet_info %}
+      <tr>
+        <th scope="row">{{tweet[1]}}</th>
+        <td>{{tweet[0]}}</td>
+        <td>{{tweet[3]}}</td>
+        <td>{{tweet[2]}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}
